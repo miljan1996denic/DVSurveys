@@ -1,16 +1,30 @@
+const _ = require('lodash');
 const keys = require('../../config/keys');
 
-module.exports = survey => {
+const renderOptions = (options, id) => {
+    console.log(options);
+    return (
+        _.map(options, ({name}) => {
+            return `
+                <a href="${keys.redirectDomain}/api/surveys/${id}/${name}">
+                    ${name}
+                </a><br/>
+            `;
+        })
+        .join("")
+    );
+};
+
+module.exports = ({ id, options, body}) => {
     return `
         <html>
             <body>
                 <div style="text-align: center;">
                     <h3>I'd like your input!</h3>
                     <p>Please answer the fallowing question:</p>
-                    <p>${survey.body}</p>
+                    <p>${body}</p>
                     <div>
-                        <a href="${keys.redirectDomain}/api/surveys/${survey.id}/yes">Yes</a>
-                        <a href="${keys.redirectDomain}/api/surveys/${survey.id}/no">No</a>
+                        ${renderOptions(options, id)}
                     </div>
                 </div>
             </body>

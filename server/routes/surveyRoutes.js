@@ -40,6 +40,7 @@ module.exports = app => {
             .compact()
             .uniqBy( 'email', 'surveyId')
             .each(({ surveyId, email, choice}) => {
+                console.log(choice);
                 Survey.updateOne(
                     {
                         _id: surveyId,
@@ -48,9 +49,12 @@ module.exports = app => {
                         }
                     },
                     {
-                        $inc: { [choice]: 1 },
+                        lastResponded: new Date(),
                         $set: { 'recipients.$.responded': true },
-                        lastResponded: new Date()
+                        $inc: { 'options.$[element].count': 1 },  
+                    },
+                    { 
+                        arrayFilters: [ { "element.name": choice } ]
                     }
                 ).exec();
             })
@@ -60,13 +64,14 @@ module.exports = app => {
     });
 
     app.post('/api/surveys', requireLogin, requireCredits, async (req, res) => {
-        const { title, subject, body, recipients } = req.body;
+        const { title, subject, body, recipients, options } = req.body;
 
         const survey = new Survey({
             title,
             subject,
             body,
             recipients: recipients.split(',').map(email => ({ email: email.trim() })),
+            options: options.split(',').map(name => ({ name: name.trim() })),
             _user: req.user.id,
             dateSent:  Date.now()
         });
