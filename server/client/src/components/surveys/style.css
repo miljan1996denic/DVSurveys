@@ -1,0 +1,13 @@
+.graph {
+    box-sizing: border-box
+}
+.skillsGraph {
+    text-align: right;
+    padding: 10px;
+    color: white;
+}
+.wrapperGraph {
+    width: 100%;
+    background-color: #ddd;
+    display: inline-block;
+}  
