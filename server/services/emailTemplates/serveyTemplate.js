@@ -1,22 +1,19 @@
-const _ = require('lodash');
-const keys = require('../../config/keys');
+const _ = require ('lodash');
+const keys = require ('../../config/keys');
 
 const renderOptions = (options, id) => {
-    console.log(options);
-    return (
-        _.map(options, ({name}) => {
-            return `
+  console.log (options);
+  return _.map (options, ({name}) => {
+    return `
                 <a href="${keys.redirectDomain}/api/surveys/${id}/${name}">
                     ${name}
                 </a><br/>
             `;
-        })
-        .join("")
-    );
+  }).join ('');
 };
 
-module.exports = ({ id, options, body}) => {
-    return `
+module.exports = ({id, options, body}) => {
+  return `
         <html>
             <body>
                 <div style="text-align: center;">
@@ -24,7 +21,7 @@ module.exports = ({ id, options, body}) => {
                     <p>Please answer the fallowing question:</p>
                     <p>${body}</p>
                     <div>
-                        ${renderOptions(options, id)}
+                        ${renderOptions (options, id)}
                     </div>
                 </div>
             </body>
